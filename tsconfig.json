@@ -1,0 +1,22 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@assets/*": ["src/assets/*"],
+      "@components/*": ["src/components/*"],
+      "@context/*": ["src/context/*"],
+      "@data/*": ["src/data/*"],
+      "@i18n/*": ["src/i18n/*"],
+      "@network/*": ["src/network/*"],
+      "@screens/*": ["src/screens/*"],
+      "@redux/*": ["src/redux/*"],
+      "@repository/*": ["src/repository/*"],
+      "@navigations/*": ["src/navigations/*"],
+      "@theme/*": ["src/theme/*"],
+      "@utils/*": ["src/utils/*"],
+      "@hooks/*": ["src/hooks"]
+    }
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
+}
