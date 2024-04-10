@@ -45,7 +45,7 @@ import {
 import { useSelector } from 'react-redux';
 import colors from '@theme/colors/colors';
 import ShowModalTimer from './ShowModalTimer';
-// import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 type Props = {
     navigation?: any
@@ -100,6 +100,8 @@ const BodyQuestion = (props: Props) => {
     const [checkNumberQuestion, setCheckNumberQuestion] = useState<boolean | null>(true);
     const [showScoreModalTimer, setShowScoreModalTimer] = useState<boolean>(false);
     const scrollViewRef = useRef<any>(null);
+    const isPayment: any = useSelector((state: any) => state.isPayReducer?.isPayment);
+
 
     useEffect(() => {
         switch (currentNumber) {
@@ -207,8 +209,8 @@ const BodyQuestion = (props: Props) => {
 
     }, [currentNumber])
 
-    // const adUnitId = __DEV__ ? TestIds.BANNER : Platform.OS === "android"
-    //     ? "ca-app-pub-4654653142461000/7616413717" : "ca-app-pub-4654653142461000/2943026751";
+    const adUnitId = __DEV__ ? TestIds.BANNER : Platform.OS === "android"
+        ? "ca-app-pub-4654653142461000/7616413717" : "ca-app-pub-4654653142461000/8360256964";
     const progressAnim = progress.interpolate({
         inputRange: [0, allQuestions?.length],
         outputRange: ['0%', '100%'],
@@ -453,13 +455,13 @@ const BodyQuestion = (props: Props) => {
                 left: 0,
                 right: 0
             }}>
-                {/* <BannerAd
+                {isPayment === false && <BannerAd
                     unitId={adUnitId}
                     size={BannerAdSize.FULL_BANNER}
                     requestOptions={{
                         requestNonPersonalizedAdsOnly: true,
                     }}
-                /> */}
+                />}
             </View>
 
             <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>

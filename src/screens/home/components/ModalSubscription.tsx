@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View, Modal, Image, ImageBackground, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SCREEN_HEIGHTSCREEN, SCREEN_WIDTHSCREEN } from '@theme/size/sizeScree';
 import { REQUIREIMG } from '@theme/require/RequireImage';
 import colors from '@theme/colors/colors';
-
+import {
+    isIosStorekit2,
+    PurchaseError,
+    requestSubscription,
+    useIAP,
+} from 'react-native-iap';
 interface Props {
     visible?: boolean;
     onRequestClose?: () => void | undefined | any;
@@ -12,7 +17,8 @@ interface Props {
     onRequestCloseDialog?: () => void | undefined | any;
     getMoney?: string | any | undefined;
     handleGetSubscriptions?: () => void | undefined | any;
-    onPressPay?: () => void | undefined | any;
+    handleBuySubscription?: ((subscription: any, offerToken: any) => void) | any | undefined;
+
     onPressTest?: () => void | undefined | any;
 
 
@@ -27,10 +33,26 @@ const ModalSubscription = (props: Props) => {
         onPressCheckBox,
         onRequestCloseDialog,
         getMoney,
-        onPressPay,
+        handleBuySubscription,
         handleGetSubscriptions,
         onPressTest } = props;
-    console.log("getMoney", getMoney);
+
+    const [ownedSubscriptions, setOwnedSubscriptions] = useState<string[]>([]);
+    const [priceNumber, setPriceNumber] = useState<string>("");
+
+
+    useEffect(() => {
+        getMoney?.map((subscription: any, index: number) => {
+            subscription?.subscriptionOfferDetails?.map((offer: any) => {
+                offer?.pricingPhases?.pricingPhaseList.map((ppl: any) => {
+                    console.log(ppl?.formattedPrice);
+                    setPriceNumber(ppl?.formattedPrice)
+                })
+            });
+        });
+    }, [getMoney])
+
+
 
     return (
         <Modal
@@ -70,30 +92,59 @@ const ModalSubscription = (props: Props) => {
                     </TouchableOpacity>
                     {/* <Text style={styles.styleTitle_1}>Full App (JLPT N2)</Text> */}
                     <Text style={styles.styleTitle_1}>広告無しのアプリを楽しもう</Text>
-                    <Text style={styles.styleTitle_3}>{getMoney}</Text>
-                    <ImageBackground
-                        source={REQUIREIMG.in_app_button}
-                        style={{
-                            width: SCREEN_WIDTHSCREEN - 60,
-                            height: 48,
-                            justifyContent: "center",
-                            alignItems: 'center',
-                            position: "absolute",
-                            bottom: 58,
-                            left: 10,
-                            right: 10,
-                        }}>
-                        <Text
-                            onPress={onPressPay}
-                            style={styles.stylePay}>購入</Text>
-                    </ImageBackground>
+                    <Text style={styles.styleTitle_3}>{priceNumber || ""}</Text>
+
+                    {getMoney?.map((subscription: any, index: number) => {
+                        return (
+                            <View
+                                key={`id_${subscription.productId}`}
+                                style={{
+                                    width: SCREEN_WIDTHSCREEN - 60,
+                                    height: 48,
+                                    justifyContent: "center",
+                                    alignItems: 'center',
+                                    position: "absolute",
+                                    bottom: 10,
+                                    left: 10,
+                                    right: 10,
+                                }}>
+                                {/* //Trên Google Play Billing V5, bạn có thể có nhiều ưu đãi cho một SKU duy nhất. */}
+                                {'subscriptionOfferDetails' in subscription && subscription?.subscriptionOfferDetails?.map((offer: any) => (
+                                    <TouchableOpacity
+                                        key={`id____${subscription.productId}`}
+
+                                        onPress={() => handleBuySubscription(
+                                            subscription.productId,
+                                            offer.offerToken,
+                                        )}
+                                    >
+                                        <ImageBackground
+                                            source={REQUIREIMG.in_app_button}
+                                            style={{
+                                                width: SCREEN_WIDTHSCREEN - 60,
+                                                height: 48,
+                                                backgroundColor: "red"
+
+                                            }}
+                                        >
+                                            <Text
+                                                style={styles.stylePay}>購入</Text>
+
+                                        </ImageBackground>
+
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                        )
+                    })}
+
                     {/* <TouchableOpacity
                         onPress={onPressTest}
                         style={{ backgroundColor: 'red', width: 100, height: 100 }}>
                         <Text>PayMan</Text>
 
                     </TouchableOpacity> */}
-                    <View style={styles.styleCheckBox}>
+                    {/* <View style={styles.styleCheckBox}>
                         <TouchableOpacity
                             onPress={onPressCheckBox}
                             style={styles.styleCheckBoxCustom}>
@@ -109,10 +160,10 @@ const ModalSubscription = (props: Props) => {
 
                         </TouchableOpacity>
                         <Text style={styles.styleTitle_4}>今後表示しない</Text>
-                    </View>
+                    </View> */}
                 </View>
             </View>
-        </Modal>
+        </Modal >
     );
 };
 
