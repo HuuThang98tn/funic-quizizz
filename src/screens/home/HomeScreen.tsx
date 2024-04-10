@@ -236,15 +236,15 @@ const HomeScreen = (props: Props) => {
 
     return (
         <SafeAreaView style={styles.styleContainer}>
+
             <ImageBackground
                 source={REQUIREIMG.img_background}
                 resizeMode="cover"
                 style={styles.styleImgBGR}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.styleBody}>
-                        <HeaderHome onPressSound={onPressSound} soundUnmute={sound} />
-
-                        <View style={styles.styleTitleHome}>
+                <View style={styles.styleBody}>
+                    <View style={styles.styleTitleHome}>
+                    <HeaderHome onPressSound={onPressSound} soundUnmute={sound} />
                             <TitleHome />
                         </View>
                         <View style={styles.styleButton}>

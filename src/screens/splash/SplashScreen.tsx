@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 60,
-        fontFamily: 'OpenSans-Bold',
+        //fontFamily: 'OpenSans-Bold',
     },
     image: {
         // flex: 1,
@@ -191,11 +191,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '700',
         marginTop: 14,
-        fontFamily: 'OpenSans-Regular',
+      //  fontFamily: 'OpenSans-Regular',
     },
     textDefault: {
         fontSize: 22,
-        fontFamily: 'OpenSans-Regular',
+      //  fontFamily: 'OpenSans-Regular',
         fontWeight: "700"
     },
     indicator: {
